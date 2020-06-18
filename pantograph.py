@@ -5,38 +5,43 @@ from io import BytesIO
 
 class Capture(ast.NodeVisitor):
     def __init__(self, parsed, par_names):
-        duc = beniget.DefUseChains()
-        duc.visit(parsed)
-        self.udc = beniget.UseDefChains(duc)
+        self.duc = beniget.DefUseChains()
+        self.duc.visit(parsed)
+        self.udc = beniget.UseDefChains(self.duc)
         self.params = {k: v for (k, v) in self.udc.chains.items() if hasattr(k, 'id') and k.id in par_names and v}
         self.graph = pydot.Dot(graph_type='digraph')
         self.node_to_dot_node = {}
+        self.src_to_target = set()
         self.visited = set()
         for param_node in self.params.keys():
             self.visit(param_node)
 
-    def get_or_create(self, node):
+    def add_edge_if_nonexistient(self, source, target):
+        if (source, target) not in self.src_to_target:
+            self.graph.add_edge(pydot.Edge(source, target))
+
+    def get_or_create_dot_node(self, node):
         if node in self.node_to_dot_node:
             return self.node_to_dot_node[node]
         else:
-            new_node = pydot.Node(str(node))
+            new_node = pydot.Node(node.id) if hasattr(node, 'id') else pydot.Node(str(node))
             self.node_to_dot_node[node] = new_node
             self.graph.add_node(new_node)
             return new_node
 
-    def visit_Name(self, node):
+    def visit(self, node):
         if node in self.visited:
             return
 
-        pdsource = self.get_or_create(node)
+        pdsource = self.get_or_create_dot_node(node)
         self.visited.add(node)
-        users = self.udc.chains[node][0]._users
+        users = self.udc.chains[node][0].users()
         if not users:
             return
 
-        pdtargets = [self.get_or_create(x) for x in users]
+        pdtargets = [self.get_or_create_dot_node(x) for x in users]
         for pdtarget in pdtargets:
-            self.graph.add_edge(pydot.Edge(pdsource, pdtarget))
+            self.add_edge_if_nonexistient(pdsource, pdtarget)
 
         for user in users:
             self.visit(user.node)
@@ -80,11 +85,11 @@ class PGraph:
         return self.graph.create_svg().decode('utf-8')
 
 
-# z = 'hello '
-# y = ' me '
-# a = z + y + ' again'
-# q = PGraph(a, z, y)
-# print(q.src)
-#
-# q.show()
-# print('goodbye')
+z = 'hello '
+y = ' me '
+a = z + y + ' again'
+q = PGraph(a, z, y)
+print(q.src)
+
+q.show()
+print('goodbye')
