@@ -2,7 +2,7 @@
 
 Pantograph is a framework for dynamic analysis of a Python interpreter. It allows users to reconstruct source code and program dependence graph from Jupyter notebooks, Python shell, and Python scripts.
 
-![](https://en.wikipedia.org/wiki/Pantograph#/media/File:Pantograph_animation.gif)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Pantograph_in_action.svg/800px-Pantograph_in_action.svg.png)
 
 ## Setup
 
