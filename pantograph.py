@@ -85,11 +85,11 @@ class PGraph:
         return self.graph.create_svg().decode('utf-8')
 
 
-z = 'hello '
-y = ' me '
-a = z + y + ' again'
-q = PGraph(a, z, y)
-print(q.src)
-
-q.show()
-print('goodbye')
+# z = 'hello '
+# y = ' me '
+# a = z + y + ' again'
+# q = PGraph(a, z, y)
+# print(q.src)
+#
+# q.show()
+# print('goodbye')
