@@ -1,6 +1,8 @@
 # Pantograph
 
-Pantograph is a framework for dynamic analysis of a Python interpreter. It allows users to reconstruct the source code and program dependence graph for code in Jupyter Notebook, Python shell, and Python scripts.
+Pantograph is a framework for dynamic analysis of a Python interpreter. It allows users to reconstruct source code and program dependence graph from Jupyter notebooks, Python shell, and Python scripts.
+
+![](https://en.wikipedia.org/wiki/Pantograph#/media/File:Pantograph_animation.gif)
 
 ## Setup
 
@@ -12,14 +14,13 @@ git clone git@github.com:breandan/pantograph.git && cd pantograph && pip install
 
 ## Usage
 
-Arbitrary Python code can be recovered by passing variables to Pantograph like so:
+Arbitrary dataflow can be recovered by passing variables to Pantograph like so:
 
 ```
 z = 'Hello '
 y = ' Pantograph '
 a = z + y + '!'
 p = PGraph(a, z, y)
-
 ```
 
 For more details, check out the [Jupyter notebook](pantograph.ipynb).
